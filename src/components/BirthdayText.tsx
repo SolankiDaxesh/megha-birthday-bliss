@@ -1,119 +1,77 @@
 
 import { motion } from "framer-motion";
-import { Gift, Heart, Sparkles, Star, Cake } from "lucide-react";
+import { Gift, PartyPopper, Cake, Sparkles } from "lucide-react";
 
 const BirthdayText = () => {
-  // Animation variants for text
-  const letterAnimation = {
-    hidden: { opacity: 0, y: 20 },
-    visible: (i: number) => ({
-      opacity: 1,
-      y: 0,
-      transition: {
-        delay: i * 0.1,
-        duration: 0.6,
-        ease: [0.22, 1, 0.36, 1],
-      },
-    }),
-  };
-
-  const message = "Happy Birthday Megha!";
-  const letters = Array.from(message);
-
   return (
-    <div className="relative bg-[url('/lovable-uploads/ca617c2b-634d-4615-9ecc-9ab4a037f596.png')] bg-cover bg-center p-10 text-center rounded-t-lg overflow-hidden">
-      {/* Overlay gradient */}
-      <div className="absolute inset-0 bg-gradient-to-r from-purple-900/80 via-pink-700/80 to-rose-700/80 backdrop-blur-sm"></div>
+    <div className="relative py-16 px-6 overflow-hidden text-center rounded-t-lg">
+      {/* Animated background */}
+      <motion.div 
+        className="absolute inset-0 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500"
+        animate={{ 
+          backgroundPosition: ["0% 0%", "100% 100%"],
+        }}
+        transition={{ 
+          duration: 20, 
+          repeat: Infinity, 
+          repeatType: "reverse" 
+        }}
+      />
       
-      {/* Animated floating decorations */}
-      <div className="absolute inset-0 z-10">
-        {[...Array(12)].map((_, i) => (
-          <motion.div
-            key={i}
-            className="absolute"
-            style={{
-              top: `${Math.random() * 100}%`,
-              left: `${Math.random() * 100}%`,
-            }}
-            initial={{ opacity: 0 }}
-            animate={{ 
-              opacity: [0.4, 0.8, 0.4],
-              y: [0, -15, 0],
-              scale: [0.8, 1, 0.8],
-              rotate: [0, Math.random() > 0.5 ? 180 : -180, 0]
-            }}
-            transition={{ 
-              duration: 3 + Math.random() * 5,
-              repeat: Infinity,
-              repeatType: "reverse",
-              delay: Math.random() * 2
-            }}
-          >
-            {i % 4 === 0 && <Star className="text-yellow-300/90 h-6 w-6 fill-yellow-200" />}
-            {i % 4 === 1 && <Heart className="text-pink-300/90 h-5 w-5 fill-pink-200" />}
-            {i % 4 === 2 && <Sparkles className="text-blue-300/90 h-5 w-5" />}
-            {i % 4 === 3 && <Gift className="text-purple-300/90 h-6 w-6 fill-purple-200" />}
-          </motion.div>
-        ))}
-      </div>
+      {/* Sparkle overlay */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSI4IiBjeT0iOCIgcj0iMC41IiBmaWxsPSJ3aGl0ZSIgZmlsbC1vcGFjaXR5PSIwLjQiLz48L3N2Zz4=')] opacity-40" />
       
-      {/* Content */}
-      <div className="relative z-20 pt-12 pb-8">
-        {/* The main title with letter animation */}
-        <div className="flex justify-center items-center flex-wrap gap-x-1 md:gap-x-2 mb-10 overflow-hidden">
-          {letters.map((letter, index) => (
-            <motion.span
-              key={index}
-              custom={index}
-              variants={letterAnimation}
-              initial="hidden"
-              animate="visible"
-              className="font-script text-6xl md:text-8xl lg:text-9xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-200 via-pink-200 to-white inline-block"
-              style={{ textShadow: "0 4px 12px rgba(0,0,0,0.3)" }}
+      {/* Content with z-index to be above backgrounds */}
+      <div className="relative z-10">
+        {/* Birthday cake icon */}
+        <motion.div
+          className="mx-auto mb-6"
+          initial={{ scale: 0, rotate: -180 }}
+          animate={{ scale: 1, rotate: 0 }}
+          transition={{ type: "spring", duration: 1.5 }}
+        >
+          <Cake className="h-20 w-20 text-white drop-shadow-glow" />
+        </motion.div>
+        
+        {/* Main heading with staggered letter animation */}
+        <motion.h1
+          className="text-5xl sm:text-6xl md:text-7xl font-script font-bold text-white mb-8 tracking-wide"
+          initial={{ opacity: 0, y: -50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1 }}
+        >
+          Happy Birthday Megha!
+        </motion.h1>
+        
+        {/* Decorative icons */}
+        <div className="flex justify-center gap-8 mb-6">
+          {[Gift, PartyPopper, Sparkles].map((Icon, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, scale: 0 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.8 + i * 0.2, type: "spring" }}
             >
-              {letter === " " ? "\u00A0" : letter}
-            </motion.span>
+              <Icon className="h-8 w-8 text-white/90" />
+            </motion.div>
           ))}
         </div>
         
-        {/* Birthday cake icon */}
-        <motion.div 
-          className="mx-auto w-16 h-16 mb-6"
-          animate={{ 
-            y: [0, -10, 0],
-            rotate: [0, 5, 0, -5, 0],
-          }}
-          transition={{ 
-            duration: 5, 
-            repeat: Infinity, 
-            repeatType: "reverse"
-          }}
-        >
-          <Cake className="h-full w-full text-pink-200 drop-shadow-lg" />
-        </motion.div>
-        
         {/* Subtitle with shimmer effect */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 2.2, duration: 0.8 }}
-          className="relative max-w-2xl mx-auto"
+        <motion.div 
+          className="relative max-w-2xl mx-auto overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 0.8 }}
         >
-          <p className="text-xl md:text-3xl text-white font-medium italic px-4">
-            Celebrating your special day with beautiful memories from your adventures!
+          <p className="text-xl md:text-2xl text-white font-medium italic pb-1">
+            Wishing you a day filled with joy and wonderful moments!
           </p>
           <motion.div
-            className="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-white/40 to-transparent"
-            animate={{
-              x: ["-100%", "100%"],
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              repeatType: "loop",
-              ease: "linear",
-              delay: 2.5,
-            }}
+            className="h-0.5 w-40 mx-auto bg-white/50 mt-4 rounded-full overflow-hidden"
+            initial={{ width: 0 }}
+            animate={{ width: "40%" }}
+            transition={{ delay: 2, duration: 0.8 }}
           />
         </motion.div>
       </div>
