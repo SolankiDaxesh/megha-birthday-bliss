@@ -32,7 +32,7 @@ const BirthdayWishes = () => {
       >
         <motion.div
           initial={{ scale: 0 }}
-          animate={{ scale: 1, rotate: [0, 10, -10, 0] }}
+          animate={{ scale: 1 }}
           transition={{ duration: 1.5, type: "spring" }}
           className="inline-block mb-4"
         >
