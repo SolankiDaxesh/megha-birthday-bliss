@@ -25,13 +25,13 @@ const BirthdayMessage = () => {
         </h2>
         
         <p className="text-md md:text-lg text-gray-700 mb-4 leading-relaxed">
-          Dear Megha, on your birthday, I want to celebrate the amazing person you are. 
+          Dear Megha, on your birthday, I want to celebrate the amazing sister you are. 
           Your kindness, intelligence, and wonderful spirit brighten the lives of everyone around you.
         </p>
         
         <p className="text-md md:text-lg text-gray-700 mb-6 leading-relaxed">
           May this year bring you all the happiness, success, and beautiful experiences you deserve. 
-          Never stop being the incredible person that you are!
+          Thank you for being the incredible sister that you are!
         </p>
         
         <div className="text-xl font-script font-bold text-purple-700">

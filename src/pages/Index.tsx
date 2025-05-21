@@ -6,6 +6,7 @@ import Confetti from "@/components/Confetti";
 import AudioPlayer from "@/components/AudioPlayer";
 import BirthdayText from "@/components/BirthdayText";
 import BirthdayMessage from "@/components/BirthdayMessage";
+import BirthdayGallery from "@/components/BirthdayGallery";
 import { motion } from "framer-motion";
 
 const Index = () => {
@@ -75,6 +76,7 @@ const Index = () => {
         >
           <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
             <BirthdayText />
+            <BirthdayGallery />
             <BirthdayMessage />
             <div className="flex justify-center py-6 bg-gradient-to-r from-purple-50 to-pink-50">
               <AudioPlayer ref={audioRef} />
