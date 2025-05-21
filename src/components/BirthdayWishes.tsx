@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Sparkles, GraduationCap } from "lucide-react";
+import { Sparkles } from "lucide-react";
 
 const wishesVariants = {
   hidden: { opacity: 0, y: 20 },
@@ -16,11 +16,11 @@ const wishesVariants = {
 
 const BirthdayWishes = () => {
   const wishes = [
-    "Congratulations on completing your post-graduation! A remarkable achievement!",
-    "May your hard-earned degree open doors to amazing opportunities!",
-    "So proud of your dedication and perseverance in achieving this milestone!",
-    "May your knowledge and skills take you to new heights in your career!",
-    "Celebrating your graduation and birthday together makes this year extra special!"
+    "May your day be as special as you are!",
+    "Wishing you health, wealth, and happiness!",
+    "May all your dreams come true!",
+    "Here's to another wonderful year!",
+    "May this year bring you countless reasons to smile!"
   ];
 
   return (
@@ -36,14 +36,14 @@ const BirthdayWishes = () => {
           transition={{ duration: 1.5, type: "spring" }}
           className="inline-block mb-4"
         >
-          <GraduationCap className="h-12 w-12 text-purple-700 mx-auto" />
+          <Sparkles className="h-12 w-12 text-yellow-500 mx-auto" />
         </motion.div>
         <motion.h2 
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           className="text-4xl md:text-5xl font-script font-bold text-purple-700 mb-8"
         >
-          Graduation Wishes
+          Birthday Wishes
         </motion.h2>
       </motion.div>
 
@@ -65,24 +65,6 @@ const BirthdayWishes = () => {
           </motion.div>
         ))}
       </div>
-      
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 2 }}
-        className="mt-10 flex justify-center"
-      >
-        <div className="relative w-full max-w-md overflow-hidden rounded-lg shadow-xl">
-          <img 
-            src="/lovable-uploads/31fe91e3-8255-4f7c-8853-cc6e760eb64f.png" 
-            alt="Graduation photo" 
-            className="w-full object-cover rounded-lg"
-          />
-          <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-purple-900/70 to-transparent p-4">
-            <p className="text-white text-center font-script text-lg">The proud graduate!</p>
-          </div>
-        </div>
-      </motion.div>
     </div>
   );
 };

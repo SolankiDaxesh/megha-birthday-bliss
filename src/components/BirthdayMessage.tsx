@@ -1,6 +1,6 @@
 
 import { motion } from "framer-motion";
-import { Heart, GraduationCap } from "lucide-react";
+import { Heart } from "lucide-react";
 
 const BirthdayMessage = () => {
   return (
@@ -12,29 +12,30 @@ const BirthdayMessage = () => {
         transition={{ delay: 0.3, duration: 0.8 }}
       >
         <motion.div
-          className="mb-6 flex justify-center gap-4"
+          className="mb-6"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: "spring", delay: 0.5 }}
         >
           <Heart className="h-10 w-10 text-pink-500 mx-auto fill-pink-200" />
-          <GraduationCap className="h-10 w-10 text-purple-700 mx-auto" />
         </motion.div>
         
         <h2 className="font-script text-3xl md:text-4xl font-bold text-purple-700 mb-6">
-          Your Special Year
+          Your Special Day
         </h2>
         
         <p className="text-md md:text-lg text-gray-700 mb-4 leading-relaxed">
-          Dear Megha, on your birthday, I'm not just celebrating another year of your amazing life, but also your incredible achievement of completing your post-graduation!
+          Dear Megha, on your birthday, I want to celebrate the amazing sister you are. 
+          Your kindness, intelligence, and wonderful spirit brighten the lives of everyone around you.
         </p>
         
         <p className="text-md md:text-lg text-gray-700 mb-6 leading-relaxed">
-          Your dedication, intelligence, and perseverance have led you to this academic success. As your sibling, I couldn't be more proud of everything you've accomplished. Here's to celebrating both your birthday and your graduation!
+          May this year bring you all the happiness, success, and beautiful experiences you deserve. 
+          Thank you for being the incredible sister that you are!
         </p>
         
         <div className="text-xl font-script font-bold text-purple-700">
-          With love, pride, and best wishes!
+          With love and best wishes!
         </div>
       </motion.div>
     </div>

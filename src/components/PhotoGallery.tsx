@@ -1,6 +1,6 @@
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
@@ -28,30 +28,23 @@ const PhotoGallery = () => {
     <div className="relative overflow-hidden rounded-lg">
       <div className="flex justify-center">
         <div className="relative w-full max-w-2xl aspect-[4/3] overflow-hidden rounded-lg">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={currentIndex}
-              initial={{ opacity: 0, x: 100 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={{ opacity: 0, x: -100 }}
-              transition={{ duration: 0.5 }}
-              className="relative w-full h-full"
-            >
-              <img 
-                src={photos[currentIndex]} 
-                alt={`Birthday memory ${currentIndex + 1}`}
-                className="w-full h-full object-cover rounded-lg shadow-md"
-              />
-              <motion.div 
-                initial={{ y: 20, opacity: 0 }}
-                animate={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.3 }}
-                className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 text-white text-center"
-              >
-                <p className="text-sm md:text-base">Beautiful memories with family {currentIndex + 1}/{photos.length}</p>
-              </motion.div>
-            </motion.div>
-          </AnimatePresence>
+          <motion.div
+            key={currentIndex}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.5 }}
+            className="relative w-full h-full"
+          >
+            <img 
+              src={photos[currentIndex]} 
+              alt={`Birthday memory ${currentIndex + 1}`}
+              className="w-full h-full object-cover rounded-lg shadow-md"
+            />
+            <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/60 to-transparent p-4 text-white text-center">
+              <p className="text-sm md:text-base">Beautiful moments with family {currentIndex + 1}/{photos.length}</p>
+            </div>
+          </motion.div>
         </div>
       </div>
 
@@ -74,24 +67,18 @@ const PhotoGallery = () => {
         </Button>
       </div>
 
-      <motion.div 
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5 }}
-        className="flex justify-center gap-2 mt-4"
-      >
+      <div className="flex justify-center gap-2 mt-4">
         {photos.map((_, idx) => (
-          <motion.button
+          <button
             key={idx}
             onClick={() => setCurrentIndex(idx)}
             className={`w-2 h-2 rounded-full ${
               idx === currentIndex ? "bg-pink-500" : "bg-gray-300"
             }`}
-            whileHover={{ scale: 1.5 }}
             aria-label={`Go to photo ${idx + 1}`}
           />
         ))}
-      </motion.div>
+      </div>
     </div>
   );
 };

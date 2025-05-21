@@ -8,7 +8,7 @@ import BirthdayMessage from "@/components/BirthdayMessage";
 import DubaiMemories from "@/components/DubaiMemories";
 import BirthdayWishes from "@/components/BirthdayWishes";
 import { motion, AnimatePresence } from "framer-motion";
-import { ArrowRight, ArrowLeft, GraduationCap } from "lucide-react";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 
 const Index = () => {
   const [isCardOpen, setIsCardOpen] = useState(false);
@@ -18,8 +18,8 @@ const Index = () => {
   const screens = [
     { component: BirthdayText, name: "Greeting" },
     { component: DubaiMemories, name: "Dubai Memories" },
-    { component: BirthdayMessage, name: "Message" },
-    { component: BirthdayWishes, name: "Graduation" }
+    { component: BirthdayMessage, name: "Birthday Message" },
+    { component: BirthdayWishes, name: "Wishes" }
   ];
 
   const openCard = () => {
@@ -66,9 +66,6 @@ const Index = () => {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
         >
-          <motion.div className="mb-6 flex justify-center">
-            <GraduationCap className="h-16 w-16 text-purple-700" />
-          </motion.div>
           <motion.h1 
             className="text-4xl md:text-5xl font-script font-bold text-purple-700 mb-8"
             animate={{ 
@@ -80,13 +77,13 @@ const Index = () => {
               repeatType: "reverse"
             }}
           >
-            Birthday & Graduation Celebration!
+            A Birthday Surprise!
           </motion.h1>
           <Button 
             onClick={openCard}
             className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-6 rounded-full text-xl font-medium hover:from-purple-700 hover:to-pink-700 shadow-lg hover:shadow-pink-200/50 transition-all duration-300"
           >
-            Open Celebration Card
+            Open Birthday Card
           </Button>
         </motion.div>
       ) : (
