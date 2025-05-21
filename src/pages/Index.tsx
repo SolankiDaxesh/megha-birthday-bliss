@@ -3,38 +3,57 @@ import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 import Confetti from "@/components/Confetti";
-import AudioPlayer from "@/components/AudioPlayer";
 import BirthdayText from "@/components/BirthdayText";
 import BirthdayMessage from "@/components/BirthdayMessage";
-import BirthdayGallery from "@/components/BirthdayGallery";
-import { motion } from "framer-motion";
+import DubaiMemories from "@/components/DubaiMemories";
+import BirthdayWishes from "@/components/BirthdayWishes";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowRight, ArrowLeft } from "lucide-react";
 
 const Index = () => {
   const [isCardOpen, setIsCardOpen] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
-  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const [currentScreen, setCurrentScreen] = useState(0);
+
+  const screens = [
+    { component: BirthdayText, name: "Greeting" },
+    { component: DubaiMemories, name: "Dubai Memories" },
+    { component: BirthdayMessage, name: "Birthday Message" },
+    { component: BirthdayWishes, name: "Wishes" }
+  ];
 
   const openCard = () => {
     setIsCardOpen(true);
     setShowConfetti(true);
-    
-    // Start playing audio when card is opened
-    if (audioRef.current) {
-      audioRef.current.play().catch(error => {
-        console.error("Audio playback failed:", error);
-        toast({
-          title: "Audio couldn't play automatically",
-          description: "Please click the music button to hear the birthday tune!",
-          duration: 5000,
-        });
-      });
-    }
     
     // Stop confetti after some time
     setTimeout(() => {
       setShowConfetti(false);
     }, 7000);
   };
+
+  const nextScreen = () => {
+    if (currentScreen < screens.length - 1) {
+      setCurrentScreen(currentScreen + 1);
+      // Small confetti burst on screen change
+      setShowConfetti(true);
+      setTimeout(() => {
+        setShowConfetti(false);
+      }, 2000);
+    }
+  };
+
+  const prevScreen = () => {
+    if (currentScreen > 0) {
+      setCurrentScreen(currentScreen - 1);
+    }
+  };
+
+  const goToScreen = (index: number) => {
+    setCurrentScreen(index);
+  };
+
+  const CurrentComponent = screens[currentScreen].component;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 flex flex-col items-center justify-center p-4 relative overflow-hidden">
@@ -68,21 +87,59 @@ const Index = () => {
           </Button>
         </motion.div>
       ) : (
-        <motion.div 
-          className="w-full max-w-3xl"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 1 }}
-        >
-          <div className="bg-white rounded-2xl shadow-2xl overflow-hidden">
-            <BirthdayText />
-            <BirthdayGallery />
-            <BirthdayMessage />
-            <div className="flex justify-center py-6 bg-gradient-to-r from-purple-50 to-pink-50">
-              <AudioPlayer ref={audioRef} />
+        <div className="w-full max-w-6xl">
+          <AnimatePresence mode="wait">
+            <motion.div 
+              key={currentScreen}
+              initial={{ opacity: 0, x: 100 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -100 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-2xl overflow-hidden"
+            >
+              <div className="p-4 md:p-8">
+                <CurrentComponent />
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Navigation buttons */}
+          <div className="flex justify-between mt-8">
+            <Button
+              variant="outline"
+              onClick={prevScreen}
+              disabled={currentScreen === 0}
+              className="flex items-center gap-2 bg-white/50 backdrop-blur-sm hover:bg-white/70"
+            >
+              <ArrowLeft size={16} /> Previous
+            </Button>
+
+            <div className="flex gap-2">
+              {screens.map((screen, index) => (
+                <Button
+                  key={index}
+                  variant={currentScreen === index ? "default" : "outline"}
+                  size="sm"
+                  onClick={() => goToScreen(index)}
+                  className={currentScreen === index 
+                    ? "bg-pink-500 hover:bg-pink-600" 
+                    : "bg-white/50 hover:bg-white/70"}
+                >
+                  {screen.name}
+                </Button>
+              ))}
             </div>
+
+            <Button
+              variant="default"
+              onClick={nextScreen}
+              disabled={currentScreen === screens.length - 1}
+              className="flex items-center gap-2 bg-pink-500 hover:bg-pink-600"
+            >
+              Next <ArrowRight size={16} />
+            </Button>
           </div>
-        </motion.div>
+        </div>
       )}
     </div>
   );
