@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
@@ -16,8 +15,9 @@ const CountdownTimer = () => {
       const now = new Date();
       const currentYear = now.getFullYear();
       
-      // Set next birthday (assuming today is the birthday, count to next year)
+      // Set next birthday and add 5 days
       let nextBirthday = new Date(currentYear + 1, now.getMonth(), now.getDate());
+      nextBirthday.setDate(nextBirthday.getDate() + 5);
       
       const difference = nextBirthday.getTime() - now.getTime();
       
