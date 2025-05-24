@@ -63,12 +63,12 @@ const DubaiMemories = () => {
   };
 
   return (
-    <div className="w-full max-w-4xl mx-auto">
+    <div className="w-full max-w-6xl mx-auto px-2 sm:px-4">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="relative aspect-[16/9] rounded-xl overflow-hidden shadow-2xl"
+        className="relative aspect-[4/3] sm:aspect-[16/10] md:aspect-[16/9] rounded-lg sm:rounded-xl overflow-hidden shadow-xl sm:shadow-2xl"
       >
         <AnimatePresence mode="wait">
           <motion.div
@@ -89,53 +89,54 @@ const DubaiMemories = () => {
               initial={{ y: 20, opacity: 0 }}
               animate={{ y: 0, opacity: 1 }}
               transition={{ delay: 0.5 }}
-              className="absolute bottom-0 left-0 right-0 p-6 text-white"
+              className="absolute bottom-0 left-0 right-0 p-3 sm:p-4 md:p-6 text-white"
             >
-              <h3 className="text-2xl md:text-3xl font-script mb-2">
+              <h3 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-script mb-1 sm:mb-2">
                 {dubaiPhotos[currentIndex].caption}
               </h3>
-              <p className="text-sm md:text-base font-light">
+              <p className="text-xs sm:text-sm md:text-base font-light">
                 Memories with family in Dubai {currentIndex + 1}/{dubaiPhotos.length}
               </p>
             </motion.div>
           </motion.div>
         </AnimatePresence>
 
-        <div className="absolute top-4 right-4 bg-black/30 backdrop-blur-sm text-white px-3 py-1 rounded-full flex items-center gap-2">
-          <Image size={16} />
-          <span className="text-sm font-medium">{currentIndex + 1} / {dubaiPhotos.length}</span>
+        <div className="absolute top-2 sm:top-4 right-2 sm:right-4 bg-black/30 backdrop-blur-sm text-white px-2 sm:px-3 py-1 rounded-full flex items-center gap-1 sm:gap-2">
+          <Image size={12} className="sm:w-4 sm:h-4" />
+          <span className="text-xs sm:text-sm font-medium">{currentIndex + 1} / {dubaiPhotos.length}</span>
         </div>
 
         <Button
           variant="outline"
           size="icon"
           onClick={goToPrevious}
-          className="absolute left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 border-none"
+          className="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 border-none w-8 h-8 sm:w-10 sm:h-10"
         >
-          <ArrowLeft className="h-6 w-6 text-white" />
+          <ArrowLeft className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
         </Button>
         
         <Button
           variant="outline" 
           size="icon"
           onClick={goToNext}
-          className="absolute right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 border-none"
+          className="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 border-none w-8 h-8 sm:w-10 sm:h-10"
         >
-          <ArrowRight className="h-6 w-6 text-white" />
+          <ArrowRight className="h-4 w-4 sm:h-6 sm:w-6 text-white" />
         </Button>
 
         <Button
           variant={isAutoPlaying ? "secondary" : "outline"}
           size="sm"
           onClick={toggleAutoPlay}
-          className="absolute bottom-4 right-4 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 text-white text-xs"
+          className="absolute bottom-2 sm:bottom-4 right-2 sm:right-4 rounded-full bg-white/30 backdrop-blur-sm hover:bg-white/50 text-white text-xs px-2 py-1 sm:px-3 sm:py-1.5"
         >
-          {isAutoPlaying ? "Pause Slideshow" : "Auto Play"}
+          <span className="hidden sm:inline">{isAutoPlaying ? "Pause Slideshow" : "Auto Play"}</span>
+          <span className="sm:hidden">{isAutoPlaying ? "⏸" : "▶"}</span>
         </Button>
       </motion.div>
 
       {/* Thumbnail navigation */}
-      <div className="flex justify-center gap-2 mt-6 overflow-x-auto pb-2 px-4">
+      <div className="flex justify-center gap-1 sm:gap-2 mt-4 sm:mt-6 overflow-x-auto pb-2 px-2 sm:px-4">
         {dubaiPhotos.map((photo, index) => (
           <motion.button
             key={index}
@@ -145,7 +146,7 @@ const DubaiMemories = () => {
             }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className={`relative w-16 h-16 rounded-md overflow-hidden flex-shrink-0 ${
+            className={`relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-md overflow-hidden flex-shrink-0 ${
               currentIndex === index ? "ring-2 ring-pink-500" : "ring-1 ring-white/30 opacity-70"
             }`}
           >

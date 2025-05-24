@@ -24,30 +24,30 @@ const BirthdayWishes = () => {
   ];
 
   return (
-    <div className="p-8 max-w-3xl mx-auto">
+    <div className="p-4 sm:p-6 md:p-8 max-w-5xl mx-auto">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        className="text-center mb-10"
+        className="text-center mb-6 sm:mb-8 md:mb-10"
       >
         <motion.div
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ duration: 1.5, type: "spring" }}
-          className="inline-block mb-4"
+          className="inline-block mb-3 sm:mb-4"
         >
-          <Sparkles className="h-12 w-12 text-yellow-500 mx-auto" />
+          <Sparkles className="h-8 w-8 sm:h-10 sm:w-10 md:h-12 md:w-12 text-yellow-500 mx-auto" />
         </motion.div>
         <motion.h2 
           initial={{ y: -20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
-          className="text-4xl md:text-5xl font-script font-bold text-purple-700 mb-8"
+          className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-script font-bold text-purple-700 mb-6 sm:mb-8"
         >
           Birthday Wishes
         </motion.h2>
       </motion.div>
 
-      <div className="grid gap-6">
+      <div className="grid gap-4 sm:gap-6">
         {wishes.map((wish, index) => (
           <motion.div
             key={index}
@@ -55,13 +55,15 @@ const BirthdayWishes = () => {
             initial="hidden"
             animate="visible"
             variants={wishesVariants}
-            className={`p-6 rounded-lg shadow-md ${
+            className={`p-4 sm:p-5 md:p-6 rounded-lg shadow-md ${
               index % 2 === 0 
                 ? "bg-gradient-to-r from-pink-100 to-purple-100" 
                 : "bg-gradient-to-r from-purple-100 to-blue-100"
             }`}
           >
-            <p className="text-gray-700 text-lg md:text-xl italic font-script">"{wish}"</p>
+            <p className="text-gray-700 text-base sm:text-lg md:text-xl italic font-script text-center px-2">
+              "{wish}"
+            </p>
           </motion.div>
         ))}
       </div>
