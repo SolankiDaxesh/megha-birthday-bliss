@@ -26,13 +26,6 @@ const GuestBook = () => {
       message: "Our dearest Megha, watching you grow has been our greatest joy! 💖 Have the most amazing birthday celebration! 🎈🎊",
       timestamp: new Date(Date.now() - 1000 * 60 * 30), // 30 minutes ago
       emoji: "💝"
-    },
-    {
-      id: 3,
-      name: "Best Friend 👭",
-      message: "Girl, you deserve all the cake, presents, and happiness today! 🍰🎁 Let's celebrate like queens! 👑✨",
-      timestamp: new Date(Date.now() - 1000 * 60 * 60), // 1 hour ago
-      emoji: "🎉"
     }
   ]);
 

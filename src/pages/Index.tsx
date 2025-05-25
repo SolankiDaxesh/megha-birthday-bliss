@@ -1,3 +1,4 @@
+
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
@@ -13,6 +14,7 @@ import Card3D from "@/components/Card3D";
 import GuestBook from "@/components/GuestBook";
 import CountdownTimer from "@/components/CountdownTimer";
 import EnhancedAudioPlayer from "@/components/EnhancedAudioPlayer";
+import BirthdayMiniGame from "@/components/BirthdayMiniGame";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft } from "lucide-react";
 
