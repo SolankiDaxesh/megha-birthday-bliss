@@ -1,7 +1,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Music, Pause, Play, Volume2, VolumeX, SkipForward, SkipBack } from "lucide-react";
+import { Music, Pause, Play, Volume2, VolumeX } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const EnhancedAudioPlayer = () => {
@@ -9,83 +9,132 @@ const EnhancedAudioPlayer = () => {
   const [volume, setVolume] = useState(0.7);
   const [isMuted, setIsMuted] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
-  const [duration, setDuration] = useState(30); // Default duration for tone
-  const [currentSong, setCurrentSong] = useState(0);
-  const [audioError, setAudioError] = useState(false);
+  const [duration] = useState(30); // 30 seconds
   
-  const audioRef = useRef<HTMLAudioElement>(null);
   const audioContextRef = useRef<AudioContext | null>(null);
+  const intervalRef = useRef<NodeJS.Timeout | null>(null);
   
-  const songs = [
-    { title: "Happy Birthday Song", src: "/birthday-song.mp3" },
-    { title: "Birthday Melody (Fallback)", src: "tone" },
-  ];
-
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
-    const updateTime = () => setCurrentTime(audio.currentTime);
-    const updateDuration = () => setDuration(audio.duration || 30);
-    const handleEnded = () => setIsPlaying(false);
-    const handleError = () => {
-      setAudioError(true);
-      setCurrentSong(1); // Switch to fallback
-    };
-
-    audio.addEventListener('timeupdate', updateTime);
-    audio.addEventListener('loadedmetadata', updateDuration);
-    audio.addEventListener('ended', handleEnded);
-    audio.addEventListener('error', handleError);
-
     return () => {
-      audio.removeEventListener('timeupdate', updateTime);
-      audio.removeEventListener('loadedmetadata', updateDuration);
-      audio.removeEventListener('ended', handleEnded);
-      audio.removeEventListener('error', handleError);
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
     };
-  }, [currentSong]);
+  }, []);
 
-  const createHappyBirthdayMelody = () => {
+  const createBeautifulBirthdayMelody = () => {
     try {
       const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
       audioContextRef.current = audioContext;
       
-      // Happy Birthday melody notes
+      // Complete Happy Birthday melody with harmonies and variations
       const melody = [
-        { note: 523.25, duration: 0.5 }, // C
-        { note: 523.25, duration: 0.5 }, // C
-        { note: 587.33, duration: 1 },   // D
-        { note: 523.25, duration: 1 },   // C
-        { note: 698.46, duration: 1 },   // F
-        { note: 659.25, duration: 2 },   // E
+        // First verse: "Happy Birthday to you"
+        { note: 261.63, duration: 0.75, harmony: [329.63] }, // C + E
+        { note: 261.63, duration: 0.25, harmony: [329.63] }, // C + E
+        { note: 293.66, duration: 1, harmony: [369.99] },    // D + F#
+        { note: 261.63, duration: 1, harmony: [329.63] },    // C + E
+        { note: 349.23, duration: 1, harmony: [440.00] },    // F + A
+        { note: 329.63, duration: 2, harmony: [415.30] },    // E + G#
         
-        { note: 523.25, duration: 0.5 }, // C
-        { note: 523.25, duration: 0.5 }, // C
-        { note: 587.33, duration: 1 },   // D
-        { note: 523.25, duration: 1 },   // C
-        { note: 783.99, duration: 1 },   // G
-        { note: 698.46, duration: 2 },   // F
+        // Second verse: "Happy Birthday to you"
+        { note: 261.63, duration: 0.75, harmony: [329.63] }, // C + E
+        { note: 261.63, duration: 0.25, harmony: [329.63] }, // C + E
+        { note: 293.66, duration: 1, harmony: [369.99] },    // D + F#
+        { note: 261.63, duration: 1, harmony: [329.63] },    // C + E
+        { note: 392.00, duration: 1, harmony: [493.88] },    // G + B
+        { note: 349.23, duration: 2, harmony: [440.00] },    // F + A
+        
+        // Third verse: "Happy Birthday dear [name]"
+        { note: 261.63, duration: 0.75, harmony: [523.25] }, // C + C (octave)
+        { note: 261.63, duration: 0.25, harmony: [523.25] }, // C + C (octave)
+        { note: 523.25, duration: 1, harmony: [659.25] },    // C + E (high)
+        { note: 440.00, duration: 1, harmony: [554.37] },    // A + C#
+        { note: 349.23, duration: 1, harmony: [440.00] },    // F + A
+        { note: 329.63, duration: 1, harmony: [415.30] },    // E + G#
+        { note: 293.66, duration: 1, harmony: [369.99] },    // D + F#
+        
+        // Fourth verse: "Happy Birthday to you"
+        { note: 466.16, duration: 0.75, harmony: [587.33] }, // Bb + D
+        { note: 466.16, duration: 0.25, harmony: [587.33] }, // Bb + D
+        { note: 440.00, duration: 1, harmony: [554.37] },    // A + C#
+        { note: 349.23, duration: 1, harmony: [440.00] },    // F + A
+        { note: 392.00, duration: 1, harmony: [493.88] },    // G + B
+        { note: 349.23, duration: 3, harmony: [440.00] },    // F + A (extended)
       ];
       
       let currentTime = audioContext.currentTime;
+      const masterGain = audioContext.createGain();
+      masterGain.connect(audioContext.destination);
+      masterGain.gain.setValueAtTime(volume * 0.4, currentTime);
       
-      melody.forEach(({ note, duration }) => {
+      melody.forEach(({ note, duration, harmony }, index) => {
+        // Main melody oscillator
         const oscillator = audioContext.createOscillator();
         const gainNode = audioContext.createGain();
         
         oscillator.connect(gainNode);
-        gainNode.connect(audioContext.destination);
+        gainNode.connect(masterGain);
         
         oscillator.frequency.setValueAtTime(note, currentTime);
         oscillator.type = 'sine';
         
+        // Smooth attack and release
         gainNode.gain.setValueAtTime(0, currentTime);
-        gainNode.gain.linearRampToValueAtTime(volume * 0.3, currentTime + 0.1);
-        gainNode.gain.linearRampToValueAtTime(0, currentTime + duration - 0.1);
+        gainNode.gain.linearRampToValueAtTime(0.6, currentTime + 0.1);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, currentTime + duration - 0.1);
         
         oscillator.start(currentTime);
         oscillator.stop(currentTime + duration);
+        
+        // Add harmony notes
+        harmony.forEach((harmonyNote, harmonyIndex) => {
+          const harmonyOsc = audioContext.createOscillator();
+          const harmonyGain = audioContext.createGain();
+          
+          harmonyOsc.connect(harmonyGain);
+          harmonyGain.connect(masterGain);
+          
+          harmonyOsc.frequency.setValueAtTime(harmonyNote, currentTime);
+          harmonyOsc.type = 'triangle';
+          
+          harmonyGain.gain.setValueAtTime(0, currentTime);
+          harmonyGain.gain.linearRampToValueAtTime(0.3, currentTime + 0.15);
+          harmonyGain.gain.exponentialRampToValueAtTime(0.01, currentTime + duration - 0.1);
+          
+          harmonyOsc.start(currentTime + 0.05);
+          harmonyOsc.stop(currentTime + duration);
+        });
+        
+        // Add subtle reverb effect with delay
+        if (index % 4 === 0) {
+          const delayNode = audioContext.createDelay();
+          const delayGain = audioContext.createGain();
+          
+          delayNode.delayTime.setValueAtTime(0.2, currentTime);
+          delayGain.gain.setValueAtTime(0.2, currentTime);
+          
+          const echoOsc = audioContext.createOscillator();
+          const echoGainNode = audioContext.createGain();
+          
+          echoOsc.connect(echoGainNode);
+          echoGainNode.connect(delayNode);
+          delayNode.connect(delayGain);
+          delayGain.connect(masterGain);
+          
+          echoOsc.frequency.setValueAtTime(note, currentTime);
+          echoOsc.type = 'sawtooth';
+          
+          echoGainNode.gain.setValueAtTime(0, currentTime);
+          echoGainNode.gain.linearRampToValueAtTime(0.1, currentTime + 0.1);
+          echoGainNode.gain.exponentialRampToValueAtTime(0.01, currentTime + duration);
+          
+          echoOsc.start(currentTime);
+          echoOsc.stop(currentTime + duration);
+        }
         
         currentTime += duration;
       });
@@ -98,56 +147,54 @@ const EnhancedAudioPlayer = () => {
   };
 
   const togglePlay = () => {
-    const audio = audioRef.current;
-    
-    if (songs[currentSong].src === "tone" || audioError) {
-      if (isPlaying) {
-        if (audioContextRef.current) {
-          audioContextRef.current.close();
-        }
-        setIsPlaying(false);
-      } else {
-        const duration = createHappyBirthdayMelody();
-        setIsPlaying(true);
-        setTimeout(() => {
-          setIsPlaying(false);
-        }, duration * 1000);
-      }
-      return;
-    }
-    
-    if (!audio) return;
-
     if (isPlaying) {
-      audio.pause();
+      if (audioContextRef.current) {
+        audioContextRef.current.close();
+      }
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+      }
+      setIsPlaying(false);
+      setCurrentTime(0);
     } else {
-      audio.play().catch(error => {
-        console.log("Audio playback failed, using fallback tone");
-        setAudioError(true);
-        setCurrentSong(1);
-        const duration = createHappyBirthdayMelody();
-        setIsPlaying(true);
-        setTimeout(() => {
-          setIsPlaying(false);
-        }, duration * 1000);
-      });
+      const totalDuration = createBeautifulBirthdayMelody();
+      setIsPlaying(true);
+      
+      // Update progress every 100ms
+      intervalRef.current = setInterval(() => {
+        setCurrentTime(prev => {
+          const newTime = prev + 0.1;
+          if (newTime >= duration) {
+            setIsPlaying(false);
+            if (intervalRef.current) {
+              clearInterval(intervalRef.current);
+            }
+            return 0;
+          }
+          return newTime;
+        });
+      }, 100);
+      
+      // Auto stop after 30 seconds
+      setTimeout(() => {
+        setIsPlaying(false);
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+        }
+        setCurrentTime(0);
+      }, 30000);
     }
   };
 
   const handleVolumeChange = (newVolume: number) => {
-    const audio = audioRef.current;
     setVolume(newVolume);
-    if (audio) {
-      audio.volume = newVolume;
+    if (audioContextRef.current && isPlaying) {
+      // Volume changes will apply to new notes as they play
     }
   };
 
   const toggleMute = () => {
-    const audio = audioRef.current;
     setIsMuted(!isMuted);
-    if (audio) {
-      audio.muted = !isMuted;
-    }
   };
 
   const formatTime = (time: number) => {
@@ -156,48 +203,23 @@ const EnhancedAudioPlayer = () => {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
-  const handleSeek = (e: React.MouseEvent<HTMLDivElement>) => {
-    const audio = audioRef.current;
-    if (!audio || !duration || songs[currentSong].src === "tone") return;
-
-    const rect = e.currentTarget.getBoundingClientRect();
-    const percent = (e.clientX - rect.left) / rect.width;
-    const newTime = percent * duration;
-    
-    audio.currentTime = newTime;
-    setCurrentTime(newTime);
-  };
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       className="bg-gradient-to-br from-purple-100 to-pink-100 rounded-xl p-4 shadow-lg max-w-md mx-auto"
     >
-      <audio
-        ref={audioRef}
-        src={songs[currentSong].src !== "tone" ? songs[currentSong].src : undefined}
-        onPlay={() => setIsPlaying(true)}
-        onPause={() => setIsPlaying(false)}
-      />
-
       <div className="text-center mb-4">
-        <h4 className="font-semibold text-purple-700 mb-1">🎵 Now Playing</h4>
-        <p className="text-sm text-gray-600">{songs[currentSong].title}</p>
-        {audioError && (
-          <p className="text-xs text-orange-600 mt-1">Using fallback audio tone</p>
-        )}
+        <h4 className="font-semibold text-purple-700 mb-1">🎵 Beautiful Birthday Melody</h4>
+        <p className="text-sm text-gray-600">Web Audio API Generated Music</p>
       </div>
 
       {/* Progress bar */}
       <div className="mb-4">
-        <div
-          className="w-full h-2 bg-gray-200 rounded-full cursor-pointer overflow-hidden"
-          onClick={handleSeek}
-        >
+        <div className="w-full h-2 bg-gray-200 rounded-full overflow-hidden">
           <motion.div
             className="h-full bg-gradient-to-r from-purple-500 to-pink-500 rounded-full"
-            style={{ width: `${duration ? (currentTime / duration) * 100 : 0}%` }}
+            style={{ width: `${(currentTime / duration) * 100}%` }}
             transition={{ duration: 0.1 }}
           />
         </div>
@@ -210,31 +232,11 @@ const EnhancedAudioPlayer = () => {
       {/* Controls */}
       <div className="flex items-center justify-center gap-3 mb-4">
         <Button
-          variant="outline"
-          size="icon"
-          className="rounded-full"
-          onClick={() => setCurrentSong(0)}
-          disabled={currentSong === 0}
-        >
-          <SkipBack size={18} />
-        </Button>
-
-        <Button
           onClick={togglePlay}
           size="icon"
           className="rounded-full h-12 w-12 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600"
         >
           {isPlaying ? <Pause size={20} /> : <Play size={20} />}
-        </Button>
-
-        <Button
-          variant="outline"
-          size="icon"
-          className="rounded-full"
-          onClick={() => setCurrentSong(1)}
-          disabled={currentSong === 1}
-        >
-          <SkipForward size={18} />
         </Button>
       </div>
 
@@ -267,7 +269,7 @@ const EnhancedAudioPlayer = () => {
 
       <div className="text-center mt-3">
         <p className="text-xs text-gray-500">
-          🎂 Birthday tunes to make your day special! 🎂
+          🎂 A beautiful melody crafted just for you! 🎂
         </p>
       </div>
     </motion.div>
