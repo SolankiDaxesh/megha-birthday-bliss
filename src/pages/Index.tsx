@@ -33,10 +33,17 @@ const Index = () => {
       component: () => (
         <div className="space-y-8">
           <h2 className="text-3xl font-script font-bold text-purple-700 text-center mb-6">
-            Interactive Birthday Fun! 🎉
+            🎉 Interactive Birthday Fun! 🎈
           </h2>
-          <BirthdayCandles />
-          <EnhancedAudioPlayer />
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="space-y-6">
+              <BirthdayCandles />
+              <EnhancedAudioPlayer />
+            </div>
+            <div>
+              <BirthdayMiniGame />
+            </div>
+          </div>
         </div>
       ), 
       name: "Interactive" 
