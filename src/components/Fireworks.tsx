@@ -14,53 +14,71 @@ const Fireworks = () => {
       useWorker: true,
     });
 
-    const fireFireworks = () => {
-      // Firework burst 1
+    const fireFirecracker = () => {
+      // Firecracker burst - quick succession of small bursts
       myConfetti({
-        particleCount: 150,
-        spread: 160,
-        startVelocity: 55,
-        origin: { x: 0.2, y: 0.7 },
-        colors: ['#ff0080', '#ff8000', '#ffff00', '#80ff00', '#00ff80', '#0080ff', '#8000ff'],
-        shapes: ['star', 'circle'],
-        scalar: 1.2,
+        particleCount: 50,
+        spread: 60,
+        startVelocity: 35,
+        origin: { x: 0.3, y: 0.8 },
+        colors: ['#ff0000', '#ff4500', '#ffd700', '#ff6347'],
+        shapes: ['circle'],
+        scalar: 0.8,
       });
 
-      // Firework burst 2
       setTimeout(() => {
         myConfetti({
-          particleCount: 150,
-          spread: 160,
-          startVelocity: 55,
-          origin: { x: 0.8, y: 0.7 },
-          colors: ['#ff1493', '#00ced1', '#ffd700', '#ff6347', '#98fb98'],
-          shapes: ['star', 'circle'],
-          scalar: 1.2,
+          particleCount: 40,
+          spread: 50,
+          startVelocity: 30,
+          origin: { x: 0.7, y: 0.8 },
+          colors: ['#ff1493', '#ff69b4', '#ffd700'],
+          shapes: ['circle'],
+          scalar: 0.8,
+        });
+      }, 200);
+
+      setTimeout(() => {
+        myConfetti({
+          particleCount: 60,
+          spread: 70,
+          startVelocity: 40,
+          origin: { x: 0.5, y: 0.8 },
+          colors: ['#ff0080', '#ff8000', '#ffff00'],
+          shapes: ['circle'],
+          scalar: 0.9,
         });
       }, 400);
-
-      // Firework burst 3
-      setTimeout(() => {
-        myConfetti({
-          particleCount: 200,
-          spread: 180,
-          startVelocity: 60,
-          origin: { x: 0.5, y: 0.6 },
-          colors: ['#ff69b4', '#ba55d3', '#9370db', '#8a2be2', '#dda0dd'],
-          shapes: ['star'],
-          scalar: 1.5,
-        });
-      }, 800);
     };
 
-    // Initial fireworks
-    fireFireworks();
+    const fireReducedFireworks = () => {
+      // Gentler firework burst
+      myConfetti({
+        particleCount: 80,
+        spread: 120,
+        startVelocity: 45,
+        origin: { x: Math.random() * 0.6 + 0.2, y: 0.7 },
+        colors: ['#ff69b4', '#ba55d3', '#9370db', '#dda0dd'],
+        shapes: ['star', 'circle'],
+        scalar: 1.0,
+      });
+    };
 
-    // Repeat fireworks every 5 seconds
-    const intervalId = setInterval(fireFireworks, 5000);
+    // Initial firecracker sequence
+    fireFirecracker();
+    setTimeout(fireFirecracker, 1000);
+    setTimeout(fireFirecracker, 2000);
+
+    // After initial sequence, switch to gentler fireworks every 8 seconds
+    const timeoutId = setTimeout(() => {
+      fireReducedFireworks();
+      const intervalId = setInterval(fireReducedFireworks, 8000);
+      
+      return () => clearInterval(intervalId);
+    }, 4000);
 
     return () => {
-      clearInterval(intervalId);
+      clearTimeout(timeoutId);
     };
   }, []);
 
