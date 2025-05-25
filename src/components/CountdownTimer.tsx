@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { Clock } from "lucide-react";
@@ -28,20 +29,25 @@ const CountdownTimer = () => {
         const seconds = Math.floor((difference / 1000) % 60);
         
         setTimeLeft({ days, hours, minutes, seconds });
+      } else {
+        setTimeLeft({ days: 0, hours: 0, minutes: 0, seconds: 0 });
       }
     };
 
+    // Calculate immediately
     calculateTimeLeft();
+    
+    // Update every second for real-time countdown
     const timer = setInterval(calculateTimeLeft, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
   const timeUnits = [
-    { label: "Days", value: timeLeft.days },
-    { label: "Hours", value: timeLeft.hours },
-    { label: "Minutes", value: timeLeft.minutes },
-    { label: "Seconds", value: timeLeft.seconds },
+    { label: "Days", value: timeLeft.days, emoji: "📅" },
+    { label: "Hours", value: timeLeft.hours, emoji: "⏰" },
+    { label: "Minutes", value: timeLeft.minutes, emoji: "⏱️" },
+    { label: "Seconds", value: timeLeft.seconds, emoji: "⚡" },
   ];
 
   return (
@@ -49,7 +55,7 @@ const CountdownTimer = () => {
       <div className="flex items-center justify-center gap-2 mb-4">
         <Clock className="h-6 w-6 text-purple-600" />
         <h3 className="text-xl font-script font-bold text-purple-700">
-          Until Next Birthday
+          🎉 Until Next Birthday 🎂
         </h3>
       </div>
       
@@ -62,6 +68,7 @@ const CountdownTimer = () => {
             transition={{ delay: index * 0.1 }}
             className="bg-white rounded-lg p-3 shadow-sm"
           >
+            <div className="text-xl mb-1">{unit.emoji}</div>
             <motion.div
               key={unit.value}
               initial={{ scale: 1.2 }}
@@ -79,7 +86,7 @@ const CountdownTimer = () => {
       </div>
       
       <p className="text-sm text-gray-600 mt-4 italic">
-        The countdown to making this day special again! 🎂
+        ⏳ The countdown to making this day special again! 🎂✨
       </p>
     </div>
   );
