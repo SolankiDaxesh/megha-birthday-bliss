@@ -1,4 +1,3 @@
-
 import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
@@ -17,6 +16,13 @@ import EnhancedAudioPlayer from "@/components/EnhancedAudioPlayer";
 import BirthdayMiniGame from "@/components/BirthdayMiniGame";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, ArrowLeft } from "lucide-react";
+import ThemeToggle from "@/components/ThemeToggle";
+import QRShare from "@/components/QRShare";
+import AchievementSystem from "@/components/AchievementSystem";
+import VirtualCake from "@/components/VirtualCake";
+import BalloonPop from "@/components/BalloonPop";
+import ConfettiCannon from "@/components/ConfettiCannon";
+import BirthdayFacts from "@/components/BirthdayFacts";
 
 const Index = () => {
   const [isCardOpen, setIsCardOpen] = useState(false);
@@ -48,6 +54,22 @@ const Index = () => {
       ), 
       name: "Interactive" 
     },
+    { 
+      component: () => (
+        <div className="space-y-8">
+          <h2 className="text-3xl font-script font-bold text-purple-700 text-center mb-6">
+            🎮 More Games & Activities! 🎲
+          </h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <VirtualCake />
+            <BalloonPop />
+          </div>
+          <ConfettiCannon />
+        </div>
+      ), 
+      name: "Games" 
+    },
+    { component: BirthdayFacts, name: "Fun Facts" },
     { component: GuestBook, name: "Guest Book" },
     { component: CountdownTimer, name: "Countdown" }
   ];
@@ -56,6 +78,11 @@ const Index = () => {
     setIsCardOpen(true);
     setShowConfetti(true);
     setShowFireworks(true);
+    
+    // Update achievement
+    if ((window as any).updateAchievement) {
+      (window as any).updateAchievement('celebrator');
+    }
     
     // Stop confetti after some time but keep fireworks
     setTimeout(() => {
@@ -66,6 +93,12 @@ const Index = () => {
   const nextScreen = () => {
     if (currentScreen < screens.length - 1) {
       setCurrentScreen(currentScreen + 1);
+      
+      // Update explorer achievement
+      if ((window as any).updateAchievement) {
+        (window as any).updateAchievement('explorer');
+      }
+      
       // Small confetti burst on screen change
       setShowConfetti(true);
       setTimeout(() => {
@@ -82,12 +115,22 @@ const Index = () => {
 
   const goToScreen = (index: number) => {
     setCurrentScreen(index);
+    
+    // Update explorer achievement
+    if ((window as any).updateAchievement) {
+      (window as any).updateAchievement('explorer');
+    }
   };
 
   const CurrentComponent = screens[currentScreen].component;
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 flex flex-col items-center justify-center p-2 sm:p-4 lg:p-6 relative overflow-hidden">
+    <div className="min-h-screen bg-gradient-to-br from-indigo-100 via-purple-100 to-pink-100 dark:from-gray-900 dark:via-purple-900 dark:to-pink-900 flex flex-col items-center justify-center p-2 sm:p-4 lg:p-6 relative overflow-hidden transition-colors duration-300">
+      {/* Theme and Share Controls */}
+      <ThemeToggle />
+      <QRShare />
+      <AchievementSystem />
+      
       {showConfetti && <Confetti />}
       {showFireworks && isCardOpen && <Fireworks />}
       <FloatingParticles />
