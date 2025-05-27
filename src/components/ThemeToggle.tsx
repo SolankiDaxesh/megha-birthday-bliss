@@ -7,10 +7,16 @@ const ThemeToggle = () => {
   const [isDark, setIsDark] = useState(false);
 
   useEffect(() => {
+    // Check system preference first
+    const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const savedTheme = localStorage.getItem('birthday-theme');
-    if (savedTheme === 'dark') {
+    
+    if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
       setIsDark(true);
       document.documentElement.classList.add('dark');
+    } else {
+      setIsDark(false);
+      document.documentElement.classList.remove('dark');
     }
   }, []);
 
@@ -32,7 +38,7 @@ const ThemeToggle = () => {
       onClick={toggleTheme}
       variant="outline"
       size="sm"
-      className="fixed top-4 right-4 z-50 bg-white/80 backdrop-blur-sm hover:bg-white/90 dark:bg-gray-800/80 dark:hover:bg-gray-800/90"
+      className="fixed top-4 right-4 z-50 bg-white/80 backdrop-blur-sm hover:bg-white/90 dark:bg-gray-800/80 dark:hover:bg-gray-800/90 dark:text-white dark:border-gray-600"
     >
       {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
       <span className="ml-2 text-xs">{isDark ? 'Light' : 'Dark'}</span>

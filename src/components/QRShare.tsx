@@ -51,15 +51,15 @@ const QRShare = () => {
         <Button
           variant="outline"
           size="sm"
-          className="fixed top-4 left-4 z-50 bg-white/80 backdrop-blur-sm hover:bg-white/90"
+          className="fixed top-4 left-4 z-50 bg-white/80 backdrop-blur-sm hover:bg-white/90 dark:bg-gray-800/80 dark:hover:bg-gray-800/90 dark:text-white dark:border-gray-600"
         >
           <Share2 className="h-4 w-4" />
           <span className="ml-2 text-xs">Share</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md">
+      <DialogContent className="sm:max-w-md bg-white dark:bg-gray-800 border-gray-200 dark:border-gray-700">
         <DialogHeader>
-          <DialogTitle className="text-center">Share This Birthday Card 🎂</DialogTitle>
+          <DialogTitle className="text-center text-gray-900 dark:text-white">Share This Birthday Card 🎂</DialogTitle>
         </DialogHeader>
         <div className="space-y-6 p-4">
           <div className="text-center">
@@ -70,7 +70,7 @@ const QRShare = () => {
                 className="w-48 h-48 mx-auto"
               />
             </div>
-            <p className="text-sm text-gray-600 mt-2">
+            <p className="text-sm text-gray-600 dark:text-gray-300 mt-2">
               Scan with phone camera to open
             </p>
           </div>
@@ -87,14 +87,14 @@ const QRShare = () => {
             <Button
               onClick={copyToClipboard}
               variant="outline"
-              className="w-full"
+              className="w-full border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700"
             >
               <Copy className="h-4 w-4 mr-2" />
               Copy Link
             </Button>
           </div>
 
-          <div className="text-center text-xs text-gray-500">
+          <div className="text-center text-xs text-gray-500 dark:text-gray-400">
             <p>Share the joy and let others celebrate too! 🎉</p>
           </div>
         </div>
