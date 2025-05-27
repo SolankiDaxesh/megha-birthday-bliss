@@ -43,7 +43,7 @@ const VirtualCake = () => {
       </div>
 
       <div className="relative mx-auto w-48 h-48 mb-6">
-        {/* Cake Base */}
+        {/* Cake Base - stays in place */}
         <div className="absolute inset-0 bg-gradient-to-b from-pink-200 to-pink-300 dark:from-pink-600 dark:to-pink-700 rounded-full border-4 border-pink-400 dark:border-pink-500">
           {/* Cake Layers */}
           <div className="absolute top-2 left-2 right-2 h-8 bg-gradient-to-b from-yellow-200 to-yellow-300 dark:from-yellow-500 dark:to-yellow-600 rounded-full"></div>
@@ -60,42 +60,71 @@ const VirtualCake = () => {
             </div>
           </div>
 
-          {/* Cut Slices */}
-          <AnimatePresence>
-            {slices.map((slice, index) => {
-              const angle = index * 45;
-              const radian = (angle * Math.PI) / 180;
-              const moveX = Math.cos(radian) * 30;
-              const moveY = Math.sin(radian) * 30;
-              
-              return (
-                <motion.div
-                  key={slice}
-                  initial={{ rotate: 0, scale: 1, x: 0, y: 0 }}
-                  animate={{ 
-                    rotate: angle + 22.5,
-                    x: moveX,
-                    y: moveY,
-                    scale: 0.9
-                  }}
-                  transition={{ duration: 0.5, ease: "easeOut" }}
-                  className="absolute inset-0 origin-center"
-                  style={{
-                    clipPath: `polygon(50% 50%, ${50 + 40 * Math.cos(radian)}% ${50 + 40 * Math.sin(radian)}%, ${50 + 40 * Math.cos((angle + 45) * Math.PI / 180)}% ${50 + 40 * Math.sin((angle + 45) * Math.PI / 180)}%)`
-                  }}
-                >
-                  <div className="w-full h-full bg-gradient-to-b from-pink-200 to-pink-300 dark:from-pink-600 dark:to-pink-700 rounded-full border-2 border-pink-400 dark:border-pink-500"></div>
-                </motion.div>
-              );
-            })}
-          </AnimatePresence>
+          {/* Cut lines to show where cake is cut */}
+          {slices.map((_, index) => {
+            const angle = index * 45;
+            return (
+              <div
+                key={`cut-${index}`}
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background: `conic-gradient(from ${angle}deg, transparent ${angle}deg, rgba(139, 69, 19, 0.3) ${angle + 1}deg, transparent ${angle + 2}deg)`
+                }}
+              />
+            );
+          })}
         </div>
+
+        {/* Separated Slices */}
+        <AnimatePresence>
+          {slices.map((slice, index) => {
+            const angle = index * 45;
+            const radian = (angle * Math.PI) / 180;
+            const moveX = Math.cos(radian) * 50;
+            const moveY = Math.sin(radian) * 50;
+            
+            return (
+              <motion.div
+                key={slice}
+                initial={{ 
+                  rotate: angle,
+                  scale: 1, 
+                  x: 0, 
+                  y: 0,
+                  opacity: 1
+                }}
+                animate={{ 
+                  rotate: angle + Math.random() * 30 - 15,
+                  x: moveX,
+                  y: moveY,
+                  scale: 0.8,
+                  opacity: 0.9
+                }}
+                transition={{ 
+                  duration: 0.8, 
+                  ease: "easeOut",
+                  delay: index * 0.1
+                }}
+                className="absolute inset-0 origin-center pointer-events-none"
+                style={{
+                  clipPath: `polygon(50% 50%, ${50 + 45 * Math.cos(radian)}% ${50 + 45 * Math.sin(radian)}%, ${50 + 45 * Math.cos((angle + 45) * Math.PI / 180)}% ${50 + 45 * Math.sin((angle + 45) * Math.PI / 180)}%)`
+                }}
+              >
+                <div className="w-full h-full bg-gradient-to-b from-pink-200 to-pink-300 dark:from-pink-600 dark:to-pink-700 rounded-full border-2 border-pink-400 dark:border-pink-500 shadow-lg">
+                  {/* Slice layers */}
+                  <div className="absolute top-2 left-2 right-2 h-8 bg-gradient-to-b from-yellow-200 to-yellow-300 dark:from-yellow-500 dark:to-yellow-600 rounded-full"></div>
+                  <div className="absolute top-6 left-4 right-4 h-6 bg-gradient-to-b from-white to-pink-100 dark:from-pink-200 dark:to-pink-300 rounded-full"></div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </AnimatePresence>
       </div>
 
       {!isComplete ? (
         <Button
           onClick={cutSlice}
-          className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-full hover:from-orange-600 hover:to-red-600"
+          className="bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-full hover:from-orange-600 hover:to-red-600 transform hover:scale-105 transition-all"
         >
           🔪 Cut a Slice! ({8 - slices.length} left)
         </Button>
@@ -109,7 +138,7 @@ const VirtualCake = () => {
           <p className="text-orange-600 dark:text-orange-400">You've shared the birthday cake with everyone!</p>
           <Button
             onClick={resetCake}
-            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-6 py-3 rounded-full"
+            className="bg-gradient-to-r from-pink-500 to-purple-500 text-white px-6 py-3 rounded-full hover:scale-105 transition-all"
           >
             🎂 Make Another Cake
           </Button>
