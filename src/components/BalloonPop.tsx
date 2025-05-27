@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -16,7 +17,7 @@ const BalloonPop = () => {
   const [gameActive, setGameActive] = useState(false);
   const [timeLeft, setTimeLeft] = useState(30);
 
-  const balloonColors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7'];
+  const balloonColors = ['#ff6b6b', '#4ecdc4', '#45b7d1', '#f9ca24', '#f0932b', '#eb4d4b', '#6c5ce7', '#fd79a8'];
 
   useEffect(() => {
     let timer: NodeJS.Timeout;
@@ -36,17 +37,16 @@ const BalloonPop = () => {
       balloonSpawner = setInterval(() => {
         const newBalloon: Balloon = {
           id: Date.now() + Math.random(),
-          x: Math.random() * 70 + 15, // Keep balloons more centered
-          y: Math.random() * 50 + 25,
+          x: Math.random() * 75 + 12.5, // Better positioning
+          y: Math.random() * 60 + 20,
           color: balloonColors[Math.floor(Math.random() * balloonColors.length)],
-          size: Math.random() * 15 + 35
+          size: Math.random() * 20 + 40 // Larger balloons for easier clicking
         };
         setBalloons(prev => {
           const newBalloons = [...prev, newBalloon];
-          // Keep max 6 balloons to prevent overcrowding
-          return newBalloons.slice(-6);
+          return newBalloons.slice(-5); // Keep max 5 balloons
         });
-      }, 1200);
+      }, 1000); // Spawn every second
     }
     return () => {
       if (balloonSpawner) clearInterval(balloonSpawner);
@@ -58,13 +58,18 @@ const BalloonPop = () => {
     setScore(0);
     setTimeLeft(30);
     setBalloons([]);
+    
+    // Update achievement
+    if (typeof window !== 'undefined' && (window as any).updateAchievement) {
+      (window as any).updateAchievement('gamer');
+    }
   };
 
   const popBalloon = (balloonId: number) => {
     setBalloons(prev => prev.filter(balloon => balloon.id !== balloonId));
     setScore(prev => prev + 10);
     
-    // Update achievement if available
+    // Update achievement
     if (typeof window !== 'undefined' && (window as any).updateAchievement) {
       (window as any).updateAchievement('gamemaster');
     }
@@ -91,7 +96,7 @@ const BalloonPop = () => {
           <div className="text-center">
             <Button
               onClick={startGame}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full text-lg hover:from-purple-700 hover:to-pink-700"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-8 py-4 rounded-full text-lg hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all"
             >
               🎈 Start Popping! 🎈
             </Button>
@@ -99,10 +104,10 @@ const BalloonPop = () => {
         ) : gameActive ? (
           <div>
             <div className="flex justify-between items-center mb-4">
-              <div className="bg-white dark:bg-gray-800 rounded-lg px-4 py-2 shadow-sm">
+              <div className="bg-white dark:bg-gray-800 rounded-lg px-4 py-2 shadow-sm border border-purple-200 dark:border-purple-600">
                 <span className="text-purple-700 dark:text-purple-300 font-bold">Score: {score} 🌟</span>
               </div>
-              <div className="bg-white dark:bg-gray-800 rounded-lg px-4 py-2 shadow-sm">
+              <div className="bg-white dark:bg-gray-800 rounded-lg px-4 py-2 shadow-sm border border-purple-200 dark:border-purple-600">
                 <span className="text-purple-700 dark:text-purple-300 font-bold">Time: {timeLeft}s ⏰</span>
               </div>
             </div>
@@ -112,35 +117,43 @@ const BalloonPop = () => {
                 {balloons.map((balloon) => (
                   <motion.button
                     key={balloon.id}
-                    initial={{ scale: 0, y: 100 }}
+                    initial={{ scale: 0, y: 50 }}
                     animate={{ 
                       scale: 1, 
-                      y: [0, -10, 0],
+                      y: [0, -15, 0],
                     }}
-                    exit={{ scale: 0, opacity: 0 }}
+                    exit={{ scale: 0, opacity: 0, y: -50 }}
                     transition={{ 
-                      y: { duration: 2, repeat: Infinity, ease: "easeInOut" }
+                      scale: { duration: 0.3 },
+                      y: { duration: 3, repeat: Infinity, ease: "easeInOut" }
                     }}
                     onClick={() => popBalloon(balloon.id)}
-                    className="absolute cursor-pointer transform -translate-x-1/2 -translate-y-1/2 hover:scale-110 transition-transform focus:outline-none"
+                    className="absolute cursor-pointer transform -translate-x-1/2 -translate-y-1/2 hover:scale-110 transition-transform focus:outline-none focus:ring-2 focus:ring-yellow-400 rounded-full"
                     style={{
                       left: `${balloon.x}%`,
                       top: `${balloon.y}%`,
                       width: `${balloon.size}px`,
-                      height: `${balloon.size * 1.2}px`,
+                      height: `${balloon.size * 1.3}px`,
                       backgroundColor: balloon.color,
                       borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
-                      border: '2px solid rgba(255,255,255,0.3)',
-                      boxShadow: 'inset 10px 10px 10px rgba(255,255,255,0.3)'
+                      border: '3px solid rgba(255,255,255,0.4)',
+                      boxShadow: 'inset 10px 10px 15px rgba(255,255,255,0.3), 0 4px 10px rgba(0,0,0,0.2)',
                     }}
-                    aria-label={`Pop balloon at ${balloon.x}% ${balloon.y}%`}
+                    aria-label={`Pop balloon`}
                   >
                     <div 
-                      className="absolute top-full left-1/2 transform -translate-x-1/2 w-0.5 h-8 bg-gray-600"
+                      className="absolute top-full left-1/2 transform -translate-x-1/2 w-0.5 h-6 bg-gray-600"
+                      style={{ marginTop: '-2px' }}
                     ></div>
                   </motion.button>
                 ))}
               </AnimatePresence>
+              
+              {/* Background decorations */}
+              <div className="absolute top-4 left-4 text-xl opacity-50">☁️</div>
+              <div className="absolute top-8 right-8 text-xl opacity-50">☁️</div>
+              <div className="absolute bottom-4 left-8 text-lg opacity-30">🌱</div>
+              <div className="absolute bottom-4 right-12 text-lg opacity-30">🌸</div>
             </div>
           </div>
         ) : (
@@ -149,15 +162,18 @@ const BalloonPop = () => {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center"
           >
-            <div className="bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-800/30 dark:to-pink-800/30 rounded-lg p-6 mb-4">
+            <div className="bg-gradient-to-r from-purple-100 to-pink-100 dark:from-purple-800/30 dark:to-pink-800/30 rounded-lg p-6 mb-4 border border-purple-200 dark:border-purple-600">
               <h4 className="text-2xl font-bold text-purple-700 dark:text-purple-300 mb-2">🎉 Game Over! 🎉</h4>
-              <p className="text-lg text-purple-600 dark:text-purple-400 mb-4">
-                Final Score: <span className="font-bold text-2xl">{score}</span> 🎈
+              <p className="text-lg text-purple-600 dark:text-purple-400 mb-2">
+                Final Score: <span className="font-bold text-2xl text-yellow-600">{score}</span> 🎈
+              </p>
+              <p className="text-sm text-purple-500 dark:text-purple-400">
+                {score >= 100 ? "Amazing! 🏆" : score >= 50 ? "Great job! 🎯" : "Keep practicing! 💪"}
               </p>
             </div>
             <Button
               onClick={resetGame}
-              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-full hover:from-purple-700 hover:to-pink-700"
+              className="bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-full hover:from-purple-700 hover:to-pink-700 transform hover:scale-105 transition-all"
             >
               🎈 Play Again 🎈
             </Button>

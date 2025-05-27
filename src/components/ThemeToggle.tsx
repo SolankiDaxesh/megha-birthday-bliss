@@ -11,11 +11,13 @@ const ThemeToggle = () => {
     const systemDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
     const savedTheme = localStorage.getItem('birthday-theme');
     
-    if (savedTheme === 'dark' || (!savedTheme && systemDark)) {
-      setIsDark(true);
+    const shouldBeDark = savedTheme === 'dark' || (!savedTheme && systemDark);
+    
+    setIsDark(shouldBeDark);
+    
+    if (shouldBeDark) {
       document.documentElement.classList.add('dark');
     } else {
-      setIsDark(false);
       document.documentElement.classList.remove('dark');
     }
   }, []);
@@ -38,10 +40,10 @@ const ThemeToggle = () => {
       onClick={toggleTheme}
       variant="outline"
       size="sm"
-      className="fixed top-4 right-4 z-50 bg-white/80 backdrop-blur-sm hover:bg-white/90 dark:bg-gray-800/80 dark:hover:bg-gray-800/90 dark:text-white dark:border-gray-600"
+      className="fixed top-4 right-4 z-50 bg-white/90 backdrop-blur-sm hover:bg-white dark:bg-gray-800/90 dark:hover:bg-gray-800 dark:text-white dark:border-gray-600 border-gray-300 shadow-lg transition-all"
     >
       {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-      <span className="ml-2 text-xs">{isDark ? 'Light' : 'Dark'}</span>
+      <span className="ml-2 text-xs font-medium">{isDark ? 'Light' : 'Dark'}</span>
     </Button>
   );
 };
