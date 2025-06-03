@@ -23,6 +23,7 @@ import VirtualCake from "@/components/VirtualCake";
 import BalloonPop from "@/components/BalloonPop";
 import ConfettiCannon from "@/components/ConfettiCannon";
 import BirthdayFacts from "@/components/BirthdayFacts";
+import DownloadCard from "@/components/DownloadCard";
 
 const Index = () => {
   const [isCardOpen, setIsCardOpen] = useState(false);
@@ -70,6 +71,7 @@ const Index = () => {
       name: "Games" 
     },
     { component: BirthdayFacts, name: "Fun Facts" },
+    { component: DownloadCard, name: "Download" },
     { component: GuestBook, name: "Guest Book" },
     { component: CountdownTimer, name: "Countdown" }
   ];
