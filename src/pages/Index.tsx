@@ -24,6 +24,7 @@ import BalloonPop from "@/components/BalloonPop";
 import ConfettiCannon from "@/components/ConfettiCannon";
 import BirthdayFacts from "@/components/BirthdayFacts";
 import DownloadCard from "@/components/DownloadCard";
+import QuickDownload from "@/components/QuickDownload";
 
 const Index = () => {
   const [isCardOpen, setIsCardOpen] = useState(false);
@@ -132,6 +133,7 @@ const Index = () => {
       <ThemeToggle />
       <QRShare />
       <AchievementSystem />
+      <QuickDownload />
       
       {showConfetti && <Confetti />}
       {showFireworks && isCardOpen && <Fireworks />}
