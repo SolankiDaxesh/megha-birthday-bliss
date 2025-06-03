@@ -456,7 +456,7 @@ const QuickDownload = () => {
                 Creating your complete birthday card...
               </p>
             )}
-          </div>
+          </motion.div>
         )}
       </AnimatePresence>
       
